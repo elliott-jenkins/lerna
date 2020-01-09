@@ -526,7 +526,7 @@ class VersionCommand extends Command {
       pkg => this.runPackageLifecycle(pkg, "version").then(() => pkg),
     ];
 
-    if (conventionalCommits && changelog) {
+    if (conventionalCommits || changelog) {
       // we can now generate the Changelog, based on the
       // the updated version that we're about to release.
       const type = independentVersions ? "independent" : "fixed";

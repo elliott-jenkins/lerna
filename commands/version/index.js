@@ -185,8 +185,18 @@ class VersionCommand extends Command {
       );
     }
 
+    // --ignore-packages
+    const { ignorePackages = [] } = this.options;
+    let filteredPackages = this.packageGraph.rawPackageList;
+
+    if (ignorePackages.length > 0) {
+      const packagesToIgnore = ignorePackages.join(", ");
+      this.logger.info("packages to ignore", packagesToIgnore);
+      filteredPackages = filteredPackages.filter(pkg => !ignorePackages.includes(pkg.name));
+    }
+
     this.updates = collectUpdates(
-      this.packageGraph.rawPackageList,
+      filteredPackages,
       this.packageGraph,
       this.execOpts,
       this.options
@@ -208,6 +218,9 @@ class VersionCommand extends Command {
 
       return !!node.version;
     });
+
+    const packagesToUpdate = this.updates.map(pkg => pkg.name).join(", ");
+    this.logger.info("packages to update", packagesToUpdate);
 
     if (!this.updates.length) {
       this.logger.success(`No changed packages to ${this.composed ? "publish" : "version"}`);

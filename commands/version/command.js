@@ -68,6 +68,10 @@ exports.builder = (yargs, composed) => {
       describe: "Disable all lifecycle scripts",
       type: "boolean",
     },
+    "ignore-packages": {
+      describe: "Skip versioning for these package names",
+      type: "array",
+    },
     "include-merged-tags": {
       describe: "Include tags from merged branches when detecting changed packages.",
       type: "boolean",
